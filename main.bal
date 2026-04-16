@@ -39,7 +39,8 @@ service /api on new http:Listener(8080) {
             select {
                 home: check m.homeTeam.name,
                 away: check m.awayTeam.name,
-                kickoff: check m.utcDate
+                kickoff: check m.utcDate,
+                league: check m.competition.name 
             };
 
         return simpleMatches;

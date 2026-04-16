@@ -1,0 +1,56 @@
+{
+  "last_build_time": 1776233554383,
+  "last_update_time": 1776233554383,
+  "last_bal_toml_update_time": 1776103544677,
+  "distribution_version": "2201.13.2",
+  "last_modified_time": {
+    "choreo_football_proxy": 1776105311112
+  },
+  "last_build_options": {
+    "testReport": false,
+    "codeCoverage": false,
+    "skipTests": true,
+    "compilationOptions": {
+      "experimental": false,
+      "observabilityIncluded": true,
+      "cloud": "",
+      "dumpGraph": false,
+      "dumpRawGraphs": false
+    }
+  },
+  "src_meta_info": [
+    {
+      "file": "D:\\projects\\choreo-football-proxy\\Ballerina.toml",
+      "hash": "5f4fbeabbb9e2e8d0f781db3c818699669ea30dddd0f7c3b90b2abbd4cbaa647",
+      "size": 146,
+      "lastModifiedTime": 1776103544677
+    },
+    {
+      "file": "D:\\projects\\choreo-football-proxy\\main.bal",
+      "hash": "8ab91128d0192b52d9c47c190b1fce174957b6bf7c474cb7f91130cc8062ab9c",
+      "size": 1573,
+      "lastModifiedTime": 1776105311112
+    }
+  ],
+  "target_exec_meta_info": {
+    "file": "D:\\projects\\choreo-football-proxy\\target\\backup\\bin\\choreo_football_proxy.jar",
+    "hash": "05718816124491d1143c5addf36bb3c345d266a10e01349c6ea74318748d8e1b",
+    "size": 46949546,
+    "lastModifiedTime": 1776233558936
+  },
+  "settings_meta_info": {
+    "file": "C:\\Users\\Qaaed\\.ballerina\\Settings.toml",
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "lastModifiedTime": 1776103975006
+  },
+  "ballerina_toml_meta_info": {
+    "file": "D:\\projects\\choreo-football-proxy\\Ballerina.toml",
+    "hash": "5f4fbeabbb9e2e8d0f781db3c818699669ea30dddd0f7c3b90b2abbd4cbaa647",
+    "size": 146,
+    "lastModifiedTime": 1776103544677
+  },
+  "imports": [
+    "ballerina/http"
+  ]
+}
