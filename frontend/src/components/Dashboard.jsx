@@ -11,7 +11,6 @@ export default function Dashboard() {
 
   const API_URL =
     "https://5975f538-e3f2-4cee-ae9f-98a23d0c171a-dev.e1-us-east-azure.choreoapis.dev/choreo-football-proxy/football-proxy/v1.0/matches/today";
-
   useEffect(() => {
     const fetchMatches = async () => {
       try {
