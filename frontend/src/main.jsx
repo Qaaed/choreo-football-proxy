@@ -6,8 +6,8 @@ import { AuthProvider } from "@asgardeo/auth-react";
 
 // connecting local app to asgardeo cloud
 const config = {
-  signInRedirectURL: "https://choreo-football-proxy.vercel.app/",
-  signOutRedirectURL: "https://choreo-football-proxy.vercel.app/",
+  signInRedirectURL: "http://localhost:5173",
+  signOutRedirectURL: "http://localhost:5173/",
   clientID: "vCXbs7NuCuAD9Lnc1QoiEAxeydUa",
   baseUrl: "https://api.asgardeo.io/t/qaaed",
   scope: ["openid", "profile"],

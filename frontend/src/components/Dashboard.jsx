@@ -11,6 +11,7 @@ export default function Dashboard() {
 
   const API_URL =
     "https://5975f538-e3f2-4cee-ae9f-98a23d0c171a-dev.e1-us-east-azure.choreoapis.dev/choreo-football-proxy/football-proxy/v1.0/matches/today";
+
   useEffect(() => {
     const fetchMatches = async () => {
       try {
@@ -46,14 +47,14 @@ export default function Dashboard() {
     (m) => !featuredMatches.includes(m),
   );
 
-  const renderScoreBoard = (match) => {
+  const renderScoreBoard = (match, large = false) => {
     if (match.status === "SCHEDULED" || match.status === "TIMED") {
       return (
-        <div className="flex flex-col items-center">
-          <span className="text-blue-500 text-xs font-black px-2 py-1 bg-blue-500/10 rounded-full mb-1">
-            VS
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-[10px] tracking-[0.15em] uppercase text-white/20 font-mono">
+            vs
           </span>
-          <span className="text-xs text-slate-400">
+          <span className="text-[11px] text-white/30 font-mono tracking-widest">
             {new Date(match.kickoff).toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
@@ -67,18 +68,27 @@ export default function Dashboard() {
     const awayGoals = match.score?.fullTime?.away ?? 0;
 
     return (
-      <div className="flex flex-col items-center">
-        <div className="text-2xl font-black text-white tracking-widest">
-          {homeGoals} - {awayGoals}
+      <div className="flex flex-col items-center gap-1">
+        <div
+          className={`font-black text-white tracking-widest font-mono ${
+            large ? "text-3xl" : "text-xl"
+          }`}
+        >
+          {homeGoals} — {awayGoals}
         </div>
         {match.status === "IN_PLAY" && (
-          <span className="animate-pulse text-green-400 text-[10px] font-bold uppercase mt-1 tracking-widest">
+          <span className="animate-pulse text-[#C9F53E] text-[9px] font-mono font-bold uppercase tracking-[0.2em]">
             Live
           </span>
         )}
         {match.status === "FINISHED" && (
-          <span className="text-slate-500 text-[10px] font-bold uppercase mt-1 tracking-widest">
+          <span className="text-white/20 text-[9px] font-mono font-bold uppercase tracking-[0.2em]">
             FT
+          </span>
+        )}
+        {match.status === "PAUSED" && (
+          <span className="text-white/40 text-[9px] font-mono font-bold uppercase tracking-[0.2em]">
+            HT
           </span>
         )}
       </div>
@@ -86,146 +96,250 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white p-8 font-sans">
-      <header className="mb-8 flex justify-between items-center max-w-7xl mx-auto">
-        <div>
-          <h1 className="text-3xl font-black tracking-tighter text-blue-500">
-            MATCH<span className="text-white">HUB</span>
-          </h1>
-          <p className="text-slate-400 text-sm">
-            Welcome back, {state.username}
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          <select
-            value={selectedLeague}
-            onChange={(e) => setSelectedLeague(e.target.value)}
-            className="bg-slate-800 border border-slate-700 text-white text-sm rounded-lg p-2 outline-none cursor-pointer"
-          >
-            {uniqueLeagues.map((league, idx) => (
-              <option key={idx} value={league}>
-                {league}
-              </option>
-            ))}
-          </select>
-          <button
-            onClick={() => signOut()}
-            className="text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 py-2 px-4 rounded-lg border border-slate-700"
-          >
-            Sign Out
-          </button>
+    <div className="min-h-screen bg-[#080808] text-white font-mono">
+      {/* Header */}
+      <header className="border-b border-white/[0.06] px-8 py-5">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          {/* Wordmark */}
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-[#C9F53E]" />
+            <div>
+              <span className="text-white text-lg font-black tracking-[-0.03em]">
+                MATCH
+              </span>
+              <span className="text-[#C9F53E] text-lg font-black tracking-[-0.03em]">
+                HUB
+              </span>
+            </div>
+          </div>
+
+          {/* Right controls */}
+          <div className="flex items-center gap-4">
+            <select
+              value={selectedLeague}
+              onChange={(e) => setSelectedLeague(e.target.value)}
+              className="bg-transparent border border-white/10 text-white/50 text-[11px] tracking-[0.12em] uppercase py-2 px-3 outline-none cursor-pointer hover:border-white/20 transition-colors"
+            >
+              {uniqueLeagues.map((league, idx) => (
+                <option
+                  key={idx}
+                  value={league}
+                  className="bg-[#111] text-white normal-case tracking-normal"
+                >
+                  {league}
+                </option>
+              ))}
+            </select>
+
+            <div className="h-4 w-px bg-white/10" />
+
+            <span className="text-[11px] tracking-[0.12em] text-white/25 uppercase">
+              {state.username}
+            </span>
+
+            <button
+              onClick={() => signOut()}
+              className="text-[11px] tracking-[0.12em] uppercase text-white/30 hover:text-white/60 transition-colors py-2 px-3 border border-white/10 hover:border-white/20"
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
       </header>
 
-      {loading && (
-        <div className="flex justify-center mt-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
-      )}
-
-      {error && (
-        <div className="max-w-2xl mx-auto bg-red-900/50 border border-red-500 text-red-200 p-6 rounded-xl text-center mt-10">
-          <h2 className="text-xl font-bold mb-2">Connection Failed</h2>
-          <p className="font-mono text-sm">{error}</p>
-        </div>
-      )}
-
-      {!loading && !error && (
-        <div className="max-w-7xl mx-auto space-y-12">
-          {featuredMatches.length > 0 && (
-            <section>
-              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                {liveMatches.length > 0 && (
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                )}
-                {liveMatches.length > 0 ? "Live Matches" : "Top Matches"}
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {featuredMatches.map((match, idx) => (
-                  <div
-                    key={`feat-${idx}`}
-                    className="bg-gradient-to-br from-blue-900/40 to-slate-800 border border-blue-500/30 p-8 rounded-3xl"
-                  >
-                    <div className="text-center text-xs text-blue-400 font-bold uppercase tracking-widest mb-6">
-                      {match.league}
-                    </div>
-                    <div className="flex justify-between items-center text-xl md:text-2xl font-bold">
-                      <div className="w-2/5 flex items-center justify-end gap-3">
-                        <span className="text-right truncate">
-                          {match.home}
-                        </span>
-                        {match.homeCrest && (
-                          <img
-                            src={match.homeCrest}
-                            alt=""
-                            className="w-8 h-8 md:w-10 md:h-10 object-contain"
-                          />
-                        )}
-                      </div>
-                      {renderScoreBoard(match)}
-                      <div className="w-2/5 flex items-center justify-start gap-3">
-                        {match.awayCrest && (
-                          <img
-                            src={match.awayCrest}
-                            alt=""
-                            className="w-8 h-8 md:w-10 md:h-10 object-contain"
-                          />
-                        )}
-                        <span className="text-left truncate">{match.away}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          <section>
-            <h2 className="text-lg font-semibold text-slate-400 mb-4">
-              Upcoming & Recent
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {standardMatches.map((match, idx) => (
-                <div
-                  key={`std-${idx}`}
-                  className="bg-slate-800 border border-slate-700 p-5 rounded-2xl hover:border-slate-500 transition-all group"
-                >
-                  <div className="text-center text-[10px] text-slate-500 font-bold uppercase mb-3">
-                    {match.league}
-                  </div>
-                  <div className="flex justify-between items-center font-semibold text-slate-200">
-                    <div className="w-2/5 flex items-center justify-end gap-2">
-                      <span className="text-right truncate text-sm">
-                        {match.home}
-                      </span>
-                      {match.homeCrest && (
-                        <img
-                          src={match.homeCrest}
-                          alt=""
-                          className="w-5 h-5 object-contain"
-                        />
-                      )}
-                    </div>
-                    {renderScoreBoard(match)}
-                    <div className="w-2/5 flex items-center justify-start gap-2">
-                      {match.awayCrest && (
-                        <img
-                          src={match.awayCrest}
-                          alt=""
-                          className="w-5 h-5 object-contain"
-                        />
-                      )}
-                      <span className="text-left truncate text-sm">
-                        {match.away}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
+      {/* Date strip */}
+      <div className="border-b border-white/[0.04] px-8 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <span className="text-[10px] tracking-[0.2em] uppercase text-white/20">
+            {new Date().toLocaleDateString("en-GB", {
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </span>
+          {liveMatches.length > 0 && (
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#C9F53E] animate-pulse" />
+              <span className="text-[10px] tracking-[0.2em] uppercase text-[#C9F53E]/70">
+                {liveMatches.length} Live
+              </span>
             </div>
-          </section>
+          )}
         </div>
-      )}
+      </div>
+
+      {/* Body */}
+      <main className="max-w-7xl mx-auto px-8 py-10 space-y-12">
+        {/* Loading */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center mt-24 gap-4">
+            <div className="w-6 h-6 border border-[#C9F53E]/40 border-t-[#C9F53E] rounded-full animate-spin" />
+            <span className="text-[10px] tracking-[0.2em] uppercase text-white/20">
+              Fetching Fixtures
+            </span>
+          </div>
+        )}
+
+        {/* Error */}
+        {error && (
+          <div className="border border-red-500/20 bg-red-500/5 p-6 max-w-lg mx-auto mt-10">
+            <p className="text-[10px] tracking-[0.2em] uppercase text-red-400/60 mb-2">
+              Connection Failed
+            </p>
+            <p className="text-sm text-red-300/50 font-mono">{error}</p>
+          </div>
+        )}
+
+        {!loading && !error && (
+          <>
+            {/* Featured / Live */}
+            {featuredMatches.length > 0 && (
+              <section>
+                <div className="flex items-center gap-3 mb-5">
+                  {liveMatches.length > 0 && (
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#C9F53E] animate-pulse" />
+                  )}
+                  <span className="text-[10px] tracking-[0.2em] uppercase text-white/30">
+                    {liveMatches.length > 0 ? "Live Matches" : "Top Matches"}
+                  </span>
+                  <div className="flex-1 h-px bg-white/[0.05]" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/[0.05]">
+                  {featuredMatches.map((match, idx) => (
+                    <div
+                      key={`feat-${idx}`}
+                      className="bg-[#080808] p-8 hover:bg-white/[0.02] transition-colors"
+                    >
+                      <p className="text-[9px] tracking-[0.25em] uppercase text-white/20 text-center mb-8">
+                        {match.league}
+                      </p>
+                      <div className="flex justify-between items-center">
+                        {/* Home */}
+                        <div className="w-2/5 flex items-center justify-end gap-3">
+                          <span className="text-right text-sm font-black uppercase tracking-tight text-white/80 truncate">
+                            {match.home}
+                          </span>
+                          {match.homeCrest && (
+                            <img
+                              src={match.homeCrest}
+                              alt=""
+                              className="w-9 h-9 object-contain flex-shrink-0"
+                            />
+                          )}
+                        </div>
+
+                        {/* Score */}
+                        <div className="px-4">
+                          {renderScoreBoard(match, true)}
+                        </div>
+
+                        {/* Away */}
+                        <div className="w-2/5 flex items-center justify-start gap-3">
+                          {match.awayCrest && (
+                            <img
+                              src={match.awayCrest}
+                              alt=""
+                              className="w-9 h-9 object-contain flex-shrink-0"
+                            />
+                          )}
+                          <span className="text-left text-sm font-black uppercase tracking-tight text-white/80 truncate">
+                            {match.away}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Standard matches */}
+            {standardMatches.length > 0 && (
+              <section>
+                <div className="flex items-center gap-3 mb-5">
+                  <span className="text-[10px] tracking-[0.2em] uppercase text-white/30">
+                    Upcoming & Recent
+                  </span>
+                  <div className="flex-1 h-px bg-white/[0.05]" />
+                  <span className="text-[10px] tracking-[0.2em] uppercase text-white/15">
+                    {standardMatches.length} fixtures
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.05]">
+                  {standardMatches.map((match, idx) => (
+                    <div
+                      key={`std-${idx}`}
+                      className="bg-[#080808] p-5 hover:bg-white/[0.02] transition-colors group"
+                    >
+                      <p className="text-[9px] tracking-[0.2em] uppercase text-white/15 text-center mb-4">
+                        {match.league}
+                      </p>
+                      <div className="flex justify-between items-center">
+                        {/* Home */}
+                        <div className="w-2/5 flex items-center justify-end gap-2">
+                          <span className="text-right text-xs font-bold uppercase tracking-tight text-white/60 truncate group-hover:text-white/80 transition-colors">
+                            {match.home}
+                          </span>
+                          {match.homeCrest && (
+                            <img
+                              src={match.homeCrest}
+                              alt=""
+                              className="w-5 h-5 object-contain flex-shrink-0"
+                            />
+                          )}
+                        </div>
+
+                        {/* Score */}
+                        <div className="px-3">
+                          {renderScoreBoard(match, false)}
+                        </div>
+
+                        {/* Away */}
+                        <div className="w-2/5 flex items-center justify-start gap-2">
+                          {match.awayCrest && (
+                            <img
+                              src={match.awayCrest}
+                              alt=""
+                              className="w-5 h-5 object-contain flex-shrink-0"
+                            />
+                          )}
+                          <span className="text-left text-xs font-bold uppercase tracking-tight text-white/60 truncate group-hover:text-white/80 transition-colors">
+                            {match.away}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Empty state */}
+            {displayedMatches.length === 0 && (
+              <div className="text-center py-24">
+                <p className="text-[10px] tracking-[0.25em] uppercase text-white/15">
+                  No fixtures found
+                </p>
+              </div>
+            )}
+          </>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-white/[0.04] px-8 py-4 mt-10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <span className="text-[9px] tracking-[0.2em] uppercase text-white/15">
+            MatchHub · 2024/25
+          </span>
+          <span className="text-[9px] tracking-[0.2em] uppercase text-white/10">
+            Secured by Asgardeo
+          </span>
+        </div>
+      </footer>
     </div>
   );
 }
