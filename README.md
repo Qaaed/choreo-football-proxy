@@ -1,17 +1,17 @@
-# ⚽ choreo-football-proxy
+# choreo-football-proxy
 
-An enterprise-grade API gateway serving live football data, secured by **WSO2 Asgardeo** and deployed on **WSO2 Choreo**. It exposes a clean, frontend-friendly REST API built in **Ballerina**, paired with a **React + Vite** dashboard that renders today's matches in real time.
+An API gateway serving live football data, deployed on **WSO2 Choreo**. It exposes a clean, frontend-friendly REST API built in **Ballerina**, paired with a **React + Vite** dashboard that renders today's matches in real time.
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    React Frontend                       │
-│         (Vite + Tailwind CSS + Asgardeo Auth)           │
+│                  (Vite + Tailwind CSS)                  │
 └────────────────────────┬────────────────────────────────┘
-                         │ Authenticated requests
+                         │ HTTP requests
                          ▼
 ┌─────────────────────────────────────────────────────────┐
 │              Ballerina Proxy (Choreo)                   │
@@ -29,18 +29,17 @@ An enterprise-grade API gateway serving live football data, secured by **WSO2 As
 
 ---
 
-## ✨ Features
+## Features
 
 - **Live match data** — today's fixtures, scores, and statuses fetched from football-data.org
 - **League filtering** — filter matches by competition directly in the UI
-- **Authenticated access** — login gated via WSO2 Asgardeo (OAuth 2.0 / OIDC)
 - **Clean proxy layer** — Ballerina service strips and reshapes the upstream API response, exposing only the fields the frontend needs
 - **Choreo deployment** — the backend is deployed as a Choreo API component with built-in observability
 - **Responsive dashboard** — dark-mode UI with live match highlighting, team crests, and scoreboard display
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 choreo-football-proxy/
@@ -48,11 +47,10 @@ choreo-football-proxy/
 ├── Ballerina.toml            # Package metadata
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx           # Auth state router
+│   │   ├── App.jsx           # App entry point
 │   │   ├── components/
-│   │   │   ├── Dashboard.jsx # Match display + league filter
-│   │   │   └── Login.jsx     # Asgardeo sign-in page
-│   │   └── main.jsx          # AuthProvider bootstrap
+│   │   │   └── Dashboard.jsx # Match display + league filter
+│   │   └── main.jsx          # App bootstrap
 │   ├── package.json
 │   └── vite.config.js
 └── LICENSE                   # Apache 2.0
@@ -60,7 +58,7 @@ choreo-football-proxy/
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
 All endpoints are served under the `/api` base path on port `8080`.
 
@@ -89,14 +87,13 @@ All endpoints are served under the `/api` base path on port `8080`.
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
 - [Ballerina](https://ballerina.io/downloads/) `2201.13.2` (Swan Lake)
 - [Node.js](https://nodejs.org/) `>=20`
 - A [football-data.org](https://www.football-data.org/) API key (free tier available)
-- A [WSO2 Asgardeo](https://asgardeo.io/) account with an application configured
 
 ---
 
@@ -130,18 +127,7 @@ All endpoints are served under the `/api` base path on port `8080`.
    npm install
    ```
 
-2. Update the Asgardeo config in `src/main.jsx` if needed:
-   ```js
-   const config = {
-     signInRedirectURL: "http://localhost:5173",
-     signOutRedirectURL: "http://localhost:5173",
-     clientID: "<your-asgardeo-client-id>",
-     baseUrl: "https://api.asgardeo.io/t/<your-org>",
-     scope: ["openid", "profile"],
-   };
-   ```
-
-3. Start the dev server:
+2. Start the dev server:
    ```bash
    npm run dev
    ```
@@ -150,7 +136,7 @@ All endpoints are served under the `/api` base path on port `8080`.
 
 ---
 
-## ☁️ Deploying to Choreo
+## Deploying to Choreo
 
 1. Push this repository to GitHub.
 2. In the [Choreo Console](https://console.choreo.dev/), create a new **Service** component and point it to this repo.
@@ -162,30 +148,18 @@ For detailed steps, see the [Choreo documentation](https://wso2.com/choreo/docs/
 
 ---
 
-## 🔐 Authentication
-
-Authentication is handled by **WSO2 Asgardeo** using the `@asgardeo/auth-react` SDK. Users must sign in before the dashboard is accessible. The `AuthProvider` wraps the entire app, and `useAuthContext` manages sign-in state, user info, and sign-out.
-
-To configure your own Asgardeo app:
-1. Register a **Single Page Application** in the Asgardeo console.
-2. Add `http://localhost:5173` as an allowed redirect URL.
-3. Copy the **Client ID** and **base URL** into `main.jsx`.
-
----
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
 | Backend | [Ballerina](https://ballerina.io/) |
 | Deployment | [WSO2 Choreo](https://wso2.com/choreo/) |
-| Auth | [WSO2 Asgardeo](https://asgardeo.io/) |
 | Frontend | React 19 + Vite 8 |
 | Styling | Tailwind CSS v4 |
 | Data Source | [football-data.org](https://www.football-data.org/) |
 
 ---
 
-## 📄 License
+## License
 
 Licensed under the [Apache License 2.0](LICENSE).
