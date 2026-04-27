@@ -323,7 +323,7 @@ export default function Dashboard() {
       <footer className="border-t border-white/[0.04] px-8 py-4 mt-10">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <span className="text-[9px] tracking-[0.2em] uppercase text-white/15">
-            MatchHub · 2024/25
+            MatchHub · 2025/26
           </span>
           <span className="text-[9px] tracking-[0.2em] uppercase text-white/10">
             Live Football Data
