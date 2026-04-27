@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
-import { useAuthContext } from "@asgardeo/auth-react";
 
 export default function Dashboard() {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedLeague, setSelectedLeague] = useState("All Leagues");
-
-  const { state, signOut } = useAuthContext();
 
   const API_URL =
     "https://5975f538-e3f2-4cee-ae9f-98a23d0c171a-dev.e1-us-east-azure.choreoapis.dev/choreo-football-proxy/football-proxy/v1.0/matches/today";
@@ -133,16 +130,9 @@ export default function Dashboard() {
 
             <div className="h-4 w-px bg-white/10" />
 
-            <span className="text-[11px] tracking-[0.12em] text-white/25 uppercase">
-              {state.username}
+            <span className="text-[11px] tracking-[0.12em] text-[#C9F53E] uppercase">
+              LIVE DATA
             </span>
-
-            <button
-              onClick={() => signOut()}
-              className="text-[11px] tracking-[0.12em] uppercase text-white/30 hover:text-white/60 transition-colors py-2 px-3 border border-white/10 hover:border-white/20"
-            >
-              Sign Out
-            </button>
           </div>
         </div>
       </header>
@@ -336,7 +326,7 @@ export default function Dashboard() {
             MatchHub · 2024/25
           </span>
           <span className="text-[9px] tracking-[0.2em] uppercase text-white/10">
-            Secured by Asgardeo
+            Live Football Data
           </span>
         </div>
       </footer>
